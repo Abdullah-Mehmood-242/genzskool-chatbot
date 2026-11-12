@@ -1,4 +1,5 @@
-# GitHub Actions workflow. Copy (or symlink) to .github/workflows/ci.yml when the repo is on GitHub.
+# GitHub Actions workflow. Canonical copy; .github/workflows/ci.yml must stay identical
+# (tests/architecture/test_repo_structure.py enforces it).
 # Runs fully offline: LLM_PROVIDER=fake, EMBEDDING_PROVIDER=fake, no secrets required.
 name: ci
 
@@ -40,7 +41,7 @@ jobs:
         run: python scripts/dev.py typecheck
       - name: Tests (unit, contract, architecture; coverage gate on domain/application)
         run: python scripts/dev.py test
-      - name: Evaluation gate (golden set, deterministic checks)
+      - name: Evaluation gate (retrieval hit-rate@5 / MRR / off-topic; golden set added in Phase 6)
         run: python scripts/dev.py eval
 
   docker-build:
@@ -75,6 +76,8 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       - run: pip install -r requirements-dev.txt -r libs/common/requirements.txt
+      # Containers run as uid 10001; on Linux the bind-mounted output dir must be writable for them.
+      - run: chmod a+rwX data/processed
       - run: docker compose up -d --build --wait
       - run: sh scripts/ingest_all.sh
       - run: python scripts/dev.py test e2e

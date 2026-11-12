@@ -10,6 +10,7 @@ help:
 	@echo "make up | down | logs | build | test | lint | fmt | typecheck | check | ingest | eval | smoke"
 
 up:            ## build and start qdrant + 5 services, wait until healthy
+	@mkdir -p data/processed && chmod a+rwX data/processed  # containers run as uid 10001 (Linux bind mounts)
 	$(COMPOSE) up -d --build --wait
 
 down:
@@ -44,7 +45,7 @@ check: lint typecheck test
 ingest:        ## trigger ingestion on the running stack (auto-ingest also runs on start/change)
 	sh scripts/ingest_all.sh
 
-eval:          ## golden-set evaluation; non-zero exit if a threshold is missed
+eval:          ## evaluation gate; non-zero exit if a threshold is missed
 	$(PY) scripts/dev.py eval
 
 smoke:

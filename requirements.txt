@@ -1,0 +1,10 @@
+# One-command local setup for development (Python 3.12):
+#     pip install -r requirements.txt
+# Pulls in every service's pinned runtime dependencies plus the dev tooling.
+# Docker images do NOT use this file: each service installs only services/<name>/requirements.txt.
+-r services/api_gateway/requirements.txt
+-r services/ingestion/requirements.txt
+-r services/retrieval/requirements.txt
+-r services/advisor/requirements.txt
+-r services/evaluation/requirements.txt
+-r requirements-dev.txt

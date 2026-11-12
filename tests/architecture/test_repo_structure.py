@@ -147,3 +147,26 @@ def test_ports_documented_consistently() -> None:
     text = (ROOT / "docs" / "ARCHITECTURE.md").read_text(encoding="utf-8")
     for svc, port in zip(SERVICES, [8000, 8001, 8002, 8003, 8004], strict=True):
         assert f"`{svc}` | {port}" in text
+
+
+def test_github_workflow_is_identical_to_canonical_ci() -> None:
+    canonical = (ROOT / "infra/ci/ci.yml").read_text(encoding="utf-8")
+    active = (ROOT / ".github/workflows/ci.yml").read_text(encoding="utf-8")
+    assert active == canonical, "copy infra/ci/ci.yml to .github/workflows/ci.yml"
+
+
+def test_root_requirements_include_every_service() -> None:
+    lines = (ROOT / "requirements.txt").read_text(encoding="utf-8").splitlines()
+    refs = {ln.split(maxsplit=1)[1] for ln in lines if ln.startswith("-r ")}
+    assert refs == {f"services/{s}/requirements.txt" for s in SERVICES} | {"requirements-dev.txt"}
+    assert all(not ln.strip() or ln.startswith(("#", "-r ")) for ln in lines), "only -r includes in the root file"
+
+
+def test_ci_makes_processed_dir_writable_before_compose() -> None:
+    steps = [
+        s.get("run", "")
+        for s in yaml.safe_load((ROOT / "infra/ci/ci.yml").read_text(encoding="utf-8"))["jobs"]["e2e"]["steps"]
+    ]
+    chmod = next(i for i, s in enumerate(steps) if "chmod a+rwX data/processed" in s)
+    up = next(i for i, s in enumerate(steps) if "docker compose up" in s)
+    assert chmod < up

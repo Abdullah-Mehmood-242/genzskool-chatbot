@@ -1,17 +1,41 @@
+# ---- Secrets: never commit real keys ----
 .env
+.env.*
+!.env.example
+
+# ---- Python ----
 __pycache__/
-*.pyc
+*.py[cod]
+*.egg-info/
+build/
+dist/
 .venv/
 .venv-*/
+venv/
+
+# ---- Tooling caches and reports ----
 .pytest_cache/
 .ruff_cache/
 .mypy_cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+
+# ---- Generated data (rebuilt by ingestion; the PDFs in data/pdfs are the source of truth) ----
 data/vectorstore/*
 !data/vectorstore/.gitkeep
 data/processed/*
 !data/processed/.gitkeep
-.coverage
-htmlcov/
-coverage.xml
+# probe PDFs that e2e tests create (they clean up, but not if a run is killed)
+data/pdfs/zz_e2e_*
+
+# ---- Editors / OS ----
 .vscode/
 .idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# ---- Logs ----
+*.log

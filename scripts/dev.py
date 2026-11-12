@@ -10,6 +10,7 @@ Usage:
     python scripts/dev.py fmt                   # ruff fix + format
     python scripts/dev.py typecheck             # mypy --strict on libs/ + domain/ + application/
     python scripts/dev.py ingest [--force]      # trigger ingestion on the running stack
+    python scripts/dev.py eval                  # evaluation gate (non-zero exit if a threshold is missed)
     python scripts/dev.py fixtures              # regenerate tests/fixtures/kb from the real PDF
     python scripts/dev.py smoke-local           # boot every service with uvicorn and probe it
     python scripts/dev.py check                 # lint + typecheck + test
@@ -145,6 +146,10 @@ def main(argv: list[str]) -> int:
         return typecheck()
     if cmd == "ingest":
         return ingest(rest)
+    if cmd == "eval":
+        # Phase 3: retrieval gate (hit-rate@5, MRR, off-topic -> empty). Phase 6 adds the golden-set gate.
+        svc = ROOT / "services" / "retrieval"
+        return _pytest(["tests/eval", "-v"], cwd=svc, env=_env(LIBS, svc))
     if cmd == "fixtures":
         svc = ROOT / "services" / "ingestion"
         return _run([sys.executable, str(ROOT / "scripts" / "build_fixtures.py")], env=_env(LIBS, svc))
