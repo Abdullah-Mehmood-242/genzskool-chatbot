@@ -76,7 +76,6 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
       - run: pip install -r requirements-dev.txt -r libs/common/requirements.txt
       - run: docker compose up -d --build --wait
-      - run: sh scripts/ingest_all.sh
       - run: python scripts/dev.py test e2e
       - if: failure()
         run: docker compose logs --no-color

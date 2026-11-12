@@ -7,6 +7,7 @@ Usage: python scripts/smoke_local.py   (exit code 0 = all services healthy)
 from __future__ import annotations
 
 import os
+import socket
 import subprocess
 import sys
 import time
@@ -76,7 +77,21 @@ def _probe(svc: str, port: int) -> list[str]:
     return problems
 
 
+def _ports_in_use() -> list[int]:
+    busy = []
+    for port in PORTS.values():
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            if s.connect_ex(("127.0.0.1", port)) == 0:
+                busy.append(port)
+    return busy
+
+
 def main() -> int:
+    busy = _ports_in_use()
+    if busy:
+        # Otherwise the probes would hit whatever already listens there (e.g. the compose stack) and pass falsely.
+        print(f"FAIL ports already in use: {busy}. Stop the compose stack first (make down).")
+        return 2
     procs = {svc: _start(svc, port) for svc, port in PORTS.items()}
     failed = False
     try:

@@ -17,7 +17,8 @@ _PHONE_RE = re.compile(r"(?:\+?92[\s-]?|0)3\d{2}[\s-]?\d{7}")
 _EMAIL_RE = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
 _BEARER_RE = re.compile(r"(?i)(bearer\s+|api[_-]?key[\"'=:\s]+)[A-Za-z0-9._\-]{8,}")
 
-_RESERVED = set(vars(logging.LogRecord("", 0, "", 0, "", None, None))) | {"message", "asctime"}
+# "color_message" is uvicorn's ANSI-coloured duplicate of msg; never emit it.
+_RESERVED = set(vars(logging.LogRecord("", 0, "", 0, "", None, None))) | {"message", "asctime", "color_message"}
 
 
 class _SecretRegistry:
@@ -97,5 +98,11 @@ def configure_logging(service: str, level: str = "INFO") -> None:
     handler._genz_json = True  # type: ignore[attr-defined]
     root.addHandler(handler)
     root.setLevel(level.upper())
+    # Uvicorn installs its own plain-text handlers before calling the app factory; route its records
+    # through the root JSON handler instead so every line a container prints is structured.
+    for name in ("uvicorn", "uvicorn.error", "uvicorn.access"):
+        server_logger = logging.getLogger(name)
+        server_logger.handlers.clear()
+        server_logger.propagate = True
     for noisy in ("uvicorn.access", "httpx", "httpcore"):
         logging.getLogger(noisy).setLevel(logging.WARNING)

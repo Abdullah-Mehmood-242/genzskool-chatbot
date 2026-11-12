@@ -108,3 +108,8 @@ def test_request_ids_are_unique_hex() -> None:
     ids = {new_request_id() for _ in range(1000)}
     assert len(ids) == 1000
     assert all(len(i) == 32 and int(i, 16) >= 0 for i in ids)
+
+
+def test_uvicorn_color_message_is_dropped() -> None:
+    rec = _record(color_message="\x1b[32mStarted\x1b[0m")
+    assert "color_message" not in rec

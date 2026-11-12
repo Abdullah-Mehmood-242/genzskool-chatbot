@@ -35,7 +35,7 @@ x-embedding-env: &embedding-env
 services:
   qdrant:
     <<: *service-defaults
-    image: ${QDRANT_IMAGE:-qdrant/qdrant:v1.15.4}
+    image: ${QDRANT_IMAGE:-qdrant/qdrant:v1.20.0}
     volumes:
       - qdrant_storage:/qdrant/storage
     ports:

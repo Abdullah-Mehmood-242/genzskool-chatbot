@@ -63,6 +63,8 @@ def test_dockerfile_matches_service(svc: str, port: int) -> None:
     assert "USER app" in text, "containers must not run as root"
     assert "HEALTHCHECK" in text
     assert "--factory" in text
+    # `exec` makes uvicorn PID 2 under tini (not a child of sh) so SIGTERM reaches it: graceful shutdown.
+    assert 'CMD ["sh", "-c", "exec uvicorn ' in text
 
 
 @pytest.mark.parametrize(("svc", "port"), PORTS.items())
@@ -163,3 +165,14 @@ def test_no_env_file_or_secret_tracked_by_git() -> None:
         path = ROOT / rel
         if path.suffix in {".py", ".md", ".yml", ".yaml", ".toml", ".txt", ".example", ".json", ".sh"}:
             assert not pattern.search(path.read_text(encoding="utf-8", errors="ignore")), f"key-like string in {rel}"
+
+
+def test_qdrant_server_matches_client_minor_version() -> None:
+    image = re.search(r"qdrant/qdrant:v(\d+)\.(\d+)\.\d+", (ROOT / "docker-compose.yml").read_text(encoding="utf-8"))
+    assert image, "qdrant image must be pinned to an exact vX.Y.Z tag"
+    for svc in ("ingestion", "retrieval"):
+        pin = next(
+            r for r in _requirements(ROOT / "services" / svc / "requirements.txt") if r.startswith("qdrant-client==")
+        )
+        major, minor = pin.split("==")[1].split(".")[:2]
+        assert (major, minor) == image.groups(), f"{svc}: qdrant-client {pin} vs server v{'.'.join(image.groups())}"

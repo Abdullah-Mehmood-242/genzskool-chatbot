@@ -12,7 +12,10 @@ from common.observability import create_service_app
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:
-    settings = settings or load_settings(Settings)
+    if settings is None:
+        # Log as JSON from the first line: settings validation itself may warn (or fail fast).
+        configure_logging(Settings.model_fields["service_name"].default, "INFO")
+        settings = load_settings(Settings)
     configure_logging(settings.service_name, settings.log_level)
     container = build_container(settings)
     app = create_service_app(

@@ -85,3 +85,30 @@ def test_configure_logging_is_idempotent(capsys: pytest.CaptureFixture[str]) -> 
         for h in before:
             if h not in root.handlers:
                 root.addHandler(h)
+
+
+def test_uvicorn_loggers_are_routed_to_json(capsys: pytest.CaptureFixture[str]) -> None:
+    root = logging.getLogger()
+    before = list(root.handlers)
+    uv = logging.getLogger("uvicorn")
+    plain = logging.StreamHandler()  # what uvicorn's default log config installs
+    uv.handlers = [plain]
+    uv.propagate = False
+    try:
+        configure_logging("svc-uv", "INFO")
+        assert uv.handlers == []
+        assert uv.propagate is True
+        assert logging.getLogger("uvicorn.error").handlers == []
+        logging.getLogger("uvicorn.error").info("Started server process [8]")
+        line = capsys.readouterr().out.strip().splitlines()[-1]
+        record = json.loads(line)
+        assert record["msg"] == "Started server process [8]"
+        assert record["logger"] == "uvicorn.error"
+        assert record["service"] == "svc-uv"
+    finally:
+        for h in list(root.handlers):
+            if getattr(h, "_genz_json", False):
+                root.removeHandler(h)
+        for h in before:
+            if h not in root.handlers:
+                root.addHandler(h)

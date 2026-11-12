@@ -76,3 +76,15 @@ async def test_oversized_body_rejected_at_service_limit() -> None:
     async with _client(create_app(s)) as c:
         r = await c.post("/healthz", content=b"x" * (s.max_body_bytes + 1))
     assert r.status_code == 413
+
+
+def test_settings_warnings_are_logged_as_json(
+    monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    import json
+
+    monkeypatch.setenv("GATEWAY_API_KEY", "YOUR_INTERNAL_GATEWAY_KEY_HERE")
+    create_app()
+    out = [ln for ln in capsys.readouterr().out.splitlines() if "weak_gateway_keys_dev_only" in ln]
+    assert out, "warning not emitted on stdout"
+    assert json.loads(out[-1])["service"] == "api_gateway"

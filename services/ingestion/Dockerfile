@@ -28,4 +28,4 @@ USER app
 EXPOSE 8001
 HEALTHCHECK --interval=10s --timeout=3s --start-period=10s --retries=5 \
     CMD python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8001/healthz', timeout=2)"
-CMD ["sh", "-c", "uvicorn app.main:create_app --factory --host 0.0.0.0 --port ${SERVICE_PORT} --no-access-log"]
+CMD ["sh", "-c", "exec uvicorn app.main:create_app --factory --host 0.0.0.0 --port ${SERVICE_PORT} --no-access-log"]
