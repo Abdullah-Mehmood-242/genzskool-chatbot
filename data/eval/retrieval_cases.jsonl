@@ -1,0 +1,48 @@
+{"id": "fee-shopify", "query": "How much does the Shopify course cost?", "expected_sections": ["Course: Shopify store setup to first sale"], "expect_empty": false}
+{"id": "fee-shopify-short", "query": "Shopify fee", "expected_sections": ["Course: Shopify store setup to first sale"], "expect_empty": false}
+{"id": "fee-tiktok-shop", "query": "TikTok Shop course price", "expected_sections": ["Course: TikTok Shop: setup, affiliates and live selling"], "expect_empty": false}
+{"id": "course-ebay", "query": "eBay product research course", "expected_sections": ["Course: eBay product research and listings"], "expect_empty": false}
+{"id": "fee-video", "query": "video editing course fees", "expected_sections": ["Course: Video editing with Premiere Pro and CapCut"], "expect_empty": false}
+{"id": "tools-video", "query": "Premiere Pro and CapCut", "expected_sections": ["Course: Video editing with Premiere Pro and CapCut"], "expect_empty": false}
+{"id": "course-dm", "query": "digital marketing SEO and ads", "expected_sections": ["Course: Digital marketing: SEO, social and ads"], "expect_empty": false}
+{"id": "course-gd", "query": "graphic design in Photoshop and Illustrator", "expected_sections": ["Course: Graphic designing in Photoshop and Illustrator"], "expect_empty": false}
+{"id": "course-ai", "query": "AI automation with ChatGPT and Make.com", "expected_sections": ["Course: AI automation with ChatGPT and Make.com"], "expect_empty": false}
+{"id": "course-ta", "query": "faceless TikTok videos", "expected_sections": ["Course: TikTok automation: faceless videos that earn"], "expect_empty": false}
+{"id": "fee-ta", "query": "TikTok automation fee", "expected_sections": ["Course: TikTok automation: faceless videos that earn"], "expect_empty": false}
+{"id": "mentor-shopify", "query": "Who teaches Shopify?", "expected_sections": ["Mentor: Hamza Ali", "Course: Shopify store setup to first sale"], "expect_empty": false}
+{"id": "mentor-sana", "query": "Who is Sana Iqbal?", "expected_sections": ["Mentor: Sana Iqbal"], "expect_empty": false}
+{"id": "mentor-bilal", "query": "Bilal Ahmed mentor", "expected_sections": ["Mentor: Bilal Ahmed"], "expect_empty": false}
+{"id": "mentor-mahnoor", "query": "Mahnoor Raza", "expected_sections": ["Mentor: Mahnoor Raza"], "expect_empty": false}
+{"id": "mentor-gd", "query": "who teaches graphic design", "expected_sections": ["Mentor: Zara Malik", "Course: Graphic designing in Photoshop and Illustrator"], "expect_empty": false}
+{"id": "mentor-usman", "query": "Usman Tariq", "expected_sections": ["Mentor: Usman Tariq"], "expect_empty": false}
+{"id": "enroll", "query": "How do I enroll?", "expected_sections": ["Enrollment", "FAQ and certificate"], "expect_empty": false}
+{"id": "payment", "query": "Is payment taken on the website?", "expected_sections": ["Enrollment"], "expect_empty": false}
+{"id": "certificate", "query": "Do I get a certificate?", "expected_sections": ["FAQ and certificate", "How it works"], "expect_empty": false}
+{"id": "cert-freelance", "query": "certificate for my Fiverr or Upwork profile", "expected_sections": ["FAQ and certificate", "How it works", "About Genz Skool"], "expect_empty": false}
+{"id": "format", "query": "Are classes live or recorded?", "expected_sections": ["How it works", "FAQ and certificate", "Enrollment"], "expect_empty": false}
+{"id": "access", "query": "how long do I keep lifetime access", "expected_sections": ["About Genz Skool", "Course catalogue overview", "FAQ and certificate", "How it works"], "expect_empty": false}
+{"id": "whatsapp", "query": "What is your WhatsApp number?", "expected_sections": ["Contact and location"], "expect_empty": false}
+{"id": "office", "query": "Where is your office in Sargodha?", "expected_sections": ["Contact and location"], "expect_empty": false}
+{"id": "hours", "query": "advisor hours", "expected_sections": ["Contact and location"], "expect_empty": false}
+{"id": "email", "query": "email address", "expected_sections": ["Contact and location"], "expect_empty": false}
+{"id": "late-join", "query": "Can I join a batch that already started?", "expected_sections": ["Course: Digital marketing: SEO, social and ads", "Course: Graphic designing in Photoshop and Illustrator"], "expect_empty": false}
+{"id": "batch-dm", "query": "evening batch for digital marketing", "expected_sections": ["Course: Digital marketing: SEO, social and ads"], "expect_empty": false}
+{"id": "seats-gd", "query": "how many seats are left in graphic design", "expected_sections": ["Course: Graphic designing in Photoshop and Illustrator"], "expect_empty": false}
+{"id": "instalments", "query": "are instalments available", "expected_sections": ["Course catalogue overview", "Course: Shopify store setup to first sale", "Course: TikTok Shop: setup, affiliates and live selling", "Course: eBay product research and listings", "Course: Video editing with Premiere Pro and CapCut", "Course: Digital marketing: SEO, social and ads", "Course: Graphic designing in Photoshop and Illustrator", "Course: AI automation with ChatGPT and Make.com"], "expect_empty": false}
+{"id": "catalogue", "query": "what courses do you offer", "expected_sections": ["Course catalogue overview", "About Genz Skool"], "expect_empty": false}
+{"id": "beginner", "query": "beginner courses list", "expected_sections": ["Course catalogue overview"], "expect_empty": false}
+{"id": "intermediate", "query": "intermediate level courses", "expected_sections": ["Course catalogue overview", "Course: AI automation with ChatGPT and Make.com", "Course: TikTok automation: faceless videos that earn"], "expect_empty": false}
+{"id": "ru-ebay", "query": "kitne paise hain ebay course ke", "expected_sections": ["Course: eBay product research and listings"], "expect_empty": false}
+{"id": "ru-shopify", "query": "shopify course ki fees kitni hai", "expected_sections": ["Course: Shopify store setup to first sale"], "expect_empty": false}
+{"id": "ru-video", "query": "mujhe video editing seekhni hai", "expected_sections": ["Course: Video editing with Premiere Pro and CapCut"], "expect_empty": false}
+{"id": "ru-gd-mentor", "query": "graphic design kaun sikhata hai", "expected_sections": ["Mentor: Zara Malik", "Course: Graphic designing in Photoshop and Illustrator"], "expect_empty": false}
+{"id": "syllabus", "query": "lesson titles and syllabus", "expected_sections": ["Course structure", "Known data limitations"], "expect_empty": false}
+{"id": "income", "query": "do you guarantee a job or income", "expected_sections": ["Known data limitations"], "expect_empty": false}
+{"id": "steps", "query": "how does it work step by step", "expected_sections": ["How it works"], "expect_empty": false}
+{"id": "age", "query": "is there an age limit for under 18", "expected_sections": ["Enrollment", "Known data limitations"], "expect_empty": false}
+{"id": "neg-weather", "query": "weather in Lahore today", "expected_sections": [], "expect_empty": true}
+{"id": "neg-pizza", "query": "best pizza recipe", "expected_sections": [], "expect_empty": true}
+{"id": "neg-python", "query": "python programming tutorial", "expected_sections": [], "expect_empty": true}
+{"id": "neg-gibberish", "query": "asdf qwerty zxcv", "expected_sections": [], "expect_empty": true}
+{"id": "neg-greeting", "query": "hi", "expected_sections": [], "expect_empty": true}
+{"id": "neg-cricket", "query": "who won the cricket match yesterday", "expected_sections": [], "expect_empty": true}

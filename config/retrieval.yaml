@@ -3,5 +3,84 @@ top_k: 5                   # chunks returned to the caller
 candidate_k: 20            # candidates fetched from each retriever before fusion
 fusion_k: 60               # RRF constant
 score_threshold: 0.3       # on the normalised fused score in [0, 1]; below -> dropped
-use_reranker: false
-use_query_rewrite: false
+# Minimum per-retriever relevance before a chunk can be a candidate at all. These make off-topic
+# queries return [] (which drives refusals). dense_min_score depends on the embedding model:
+# fake 0.3; tune for real models with `python scripts/dev.py test retrieval` + the eval set.
+dense_min_score: 0.3       # cosine similarity (fake embeddings: unrelated chunks measure 0.15-0.28)
+sparse_min_score: 0.0      # BM25 score floor
+# Keyword candidates must cover the query: >= min_term_matches of its content words, or at least
+# min_term_coverage of them (synonyms count). Stops "weather in Lahore today" matching on "today".
+min_term_matches: 2
+min_term_coverage: 0.5
+use_reranker: false        # also needs RERANKER_PROVIDER in .env
+use_query_rewrite: false   # LLM rewrite port (none shipped; deterministic synonyms below always apply)
+
+# Deterministic query expansion: a user word (key) also searches for these KB words.
+# Keys must be single content words; values should be words that appear in the knowledge base.
+synonyms:
+  price: [fee]
+  cost: [fee]
+  charges: [fee]
+  charge: [fee]
+  kitni: [fee]
+  kitne: [fee]
+  paise: [fee]
+  rupees: [fee, rs]
+  installment: [instalments]
+  qist: [instalments]
+  afford: [fee]
+  budget: [fee]
+  enrol: [enroll]
+  enrolment: [enrollment]
+  enrollment: [enroll]
+  register: [enroll]
+  registration: [enroll]
+  admission: [enroll]
+  signup: [enroll]
+  join: [enroll, batch]
+  certification: [certificate]
+  certified: [certificate]
+  teacher: [mentor]
+  instructor: [mentor]
+  trainer: [mentor]
+  teaches: [mentor]
+  sikhata: [mentor]
+  sikhati: [mentor]
+  reel: [video, editing]
+  editor: [editing]
+  edit: [editing]
+  youtube: [video, editing]
+  premiere: [editing]
+  capcut: [editing]
+  designer: [designing, graphic]
+  design: [designing, graphic]
+  logo: [graphic, branding]
+  photoshop: [graphic]
+  seo: [marketing]
+  ads: [marketing]
+  facebook: [marketing, social]
+  instagram: [marketing, social]
+  store: [shopify]
+  dropshipping: [shopify, ebay]
+  ecommerce: [e-commerce]
+  faceless: [tiktok, automation]
+  chatgpt: [automation]
+  ai: [automation]
+  phone: [whatsapp, contact]
+  number: [whatsapp, contact]
+  call: [whatsapp, contact]
+  email: [contact]
+  address: [location, sargodha]
+  office: [address, location]
+  located: [location, address]
+  timing: [hours, batch]
+  timings: [hours, batch]
+  schedule: [batch]
+  live: [classes]
+  recorded: [lessons]
+  access: [lifetime]
+  experience: [beginner]
+  beginner: [level]
+  fresher: [beginner]
+  earn: [earning, freelancing]
+  freelance: [freelancing, fiverr, upwork]

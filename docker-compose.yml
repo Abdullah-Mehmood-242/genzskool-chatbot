@@ -72,6 +72,9 @@ services:
     build: { context: ., dockerfile: services/retrieval/Dockerfile }
     environment:
       <<: [*common-env, *embedding-env]
+      RERANKER_PROVIDER: ${RERANKER_PROVIDER:-none}
+      RERANKER_API_KEY: ${RERANKER_API_KEY:-}
+      RERANKER_MODEL: ${RERANKER_MODEL:-}
     volumes:
       - ./data/processed:/app/data/processed:ro
     ports:

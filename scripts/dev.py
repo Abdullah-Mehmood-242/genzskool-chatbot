@@ -10,6 +10,7 @@ Usage:
     python scripts/dev.py fmt                   # ruff fix + format
     python scripts/dev.py typecheck             # mypy --strict on libs/ + domain/ + application/
     python scripts/dev.py ingest [--force]      # trigger ingestion on the running stack
+    python scripts/dev.py fixtures              # regenerate tests/fixtures/kb from the real PDF
     python scripts/dev.py smoke-local           # boot every service with uvicorn and probe it
     python scripts/dev.py check                 # lint + typecheck + test
 """
@@ -144,6 +145,9 @@ def main(argv: list[str]) -> int:
         return typecheck()
     if cmd == "ingest":
         return ingest(rest)
+    if cmd == "fixtures":
+        svc = ROOT / "services" / "ingestion"
+        return _run([sys.executable, str(ROOT / "scripts" / "build_fixtures.py")], env=_env(LIBS, svc))
     if cmd == "smoke-local":
         return _run([sys.executable, str(ROOT / "scripts" / "smoke_local.py")])
     if cmd == "check":

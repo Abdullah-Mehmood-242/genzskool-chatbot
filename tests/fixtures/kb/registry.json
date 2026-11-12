@@ -1,0 +1,12 @@
+{
+  "schema": 1,
+  "documents": {
+    "genzskool_knowledge_base": {
+      "source_file": "genzskool_knowledge_base.pdf",
+      "content_hash": "6495e4e8778eab65e244c851ae3929a8dfca65fab60961693d2c1d2d5562037a",
+      "active_index_version": 1,
+      "chunks": 22,
+      "ingested_at": "2026-11-12T00:00:00+00:00"
+    }
+  }
+}
