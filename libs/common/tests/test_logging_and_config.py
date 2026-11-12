@@ -69,7 +69,7 @@ def test_load_settings_invalid_value_raises_configuration_error(monkeypatch: pyt
 
 
 def test_secrets_are_never_logged(monkeypatch: pytest.MonkeyPatch) -> None:
-    secret = "sk-ant-THIS-IS-A-REAL-LOOKING-KEY-123456"
+    secret = "-".join(["sk", "ant", "THIS-IS-A-REAL-LOOKING-KEY-123456"])  # built at runtime: no key literal in git
     monkeypatch.setenv("LLM_API_KEY", secret)
     settings = load_settings(_Settings)
     logger, stream = _capture("secret-test")

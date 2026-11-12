@@ -13,3 +13,5 @@ data/processed/*
 .coverage
 htmlcov/
 coverage.xml
+.vscode/
+.idea/

@@ -23,7 +23,7 @@ class RetryPolicy:
 
     def delay(self, attempt: int, rng: random.Random | None = None) -> float:
         """Full jitter: uniform(0, min(max, base * 2**attempt))."""
-        cap = min(self.max_delay_s, self.base_delay_s * (2**attempt))
+        cap = min(self.max_delay_s, self.base_delay_s * (2 ** min(attempt, 32)))  # cap exponent: no overflow
         return (rng or random).uniform(0, cap)
 
 

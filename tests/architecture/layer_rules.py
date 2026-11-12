@@ -61,9 +61,15 @@ def _imports(tree: ast.AST) -> list[tuple[int, str]]:
     return found
 
 
+ROOT_FILES = {"__init__.py", "main.py", "settings.py"}  # composition entrypoints directly under app/
+
+
 def _layer_of(path: Path, app_root: Path) -> str | None:
+    """Return the layer name, None for an allowed root file, or 'unknown' for anything else."""
     rel = path.relative_to(app_root).parts
-    return rel[0] if rel and rel[0] in THIRD_PARTY_ALLOWED else None
+    if len(rel) == 1:
+        return None if rel[0] in ROOT_FILES else "unknown"
+    return rel[0] if rel[0] in THIRD_PARTY_ALLOWED else "unknown"
 
 
 def check_service(service_dir: Path, repo_root: Path) -> list[Violation]:
@@ -71,8 +77,12 @@ def check_service(service_dir: Path, repo_root: Path) -> list[Violation]:
     violations: list[Violation] = []
     for path in sorted(app_root.rglob("*.py")):
         layer = _layer_of(path, app_root)
-        tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
         rel = path.relative_to(repo_root).as_posix()
+        if layer == "unknown":
+            reason = "code must live in api/, application/, domain/ or infrastructure/ (or main.py/settings.py)"
+            violations.append(Violation(rel, 1, "unknown", "-", reason))
+            continue
+        tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
         for line, module in _imports(tree):
             top = module.split(".")[0]
             if module.startswith("."):

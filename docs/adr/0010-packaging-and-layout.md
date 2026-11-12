@@ -13,16 +13,17 @@ same top-level package name `app`. The shared library lives in `libs/common/`.
 - Each service is tested, linted and type-checked **in its own process** with
   `PYTHONPATH=libs:services/<name>`, so the duplicate `app` package name never collides. The
   Makefile loops over services.
-- Each service has a `pyproject.toml` with exact `==` pins. `uv`/`pip-tools` are not
-  required to build; the Docker build installs from the pinned `pyproject.toml`.
+- Each service pins exact `==` versions in `requirements.txt`, which is the single source:
+  `pyproject.toml` reads it dynamically and the Docker build installs it directly. `uv`/`pip-tools`
+  are not required.
 - Besides the scaffolded `contracts/ errors/ logging/ config/`, `libs/common` adds two
   cross-cutting (non-business) subpackages: `resilience/` (retry with jitter, circuit breaker)
   and `observability/` (service app factory: request id, body limit, access log, `/healthz`,
   `/readyz`, `/metrics`). Keeping them shared avoids five copies (DRY).
 - `common/logging` shadows the stdlib name if `libs/common` itself is put on `sys.path`; only
   `libs/` may be on the path (the task runner enforces this).
-- Docker images target Python 3.12 (spec). The code avoids 3.13+ only features. Local
-  development has also been verified on Python 3.14.
+- Python 3.12 everywhere (spec): Docker images use `python:3.12-slim`, the local venv is 3.12
+  (`.python-version`), and ruff/mypy target `py312`.
 
 ## Consequences
 - (+) Matches the scaffold without renaming.

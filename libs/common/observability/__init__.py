@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import re
 import time
 from collections.abc import Awaitable, Callable, Mapping
 from contextlib import AbstractAsyncContextManager
@@ -18,6 +19,8 @@ from common.logging.context import REQUEST_ID_HEADER, new_request_id, set_reques
 
 ReadinessCheck = Callable[[], Awaitable[bool]]
 access_logger = logging.getLogger("access")
+_REQUEST_ID_RE = re.compile(r"[A-Za-z0-9-]{8,64}")
+_ASCII_DIGITS_RE = re.compile(r"[0-9]+")
 
 
 class ServiceMetrics:
@@ -47,15 +50,17 @@ class RequestContextMiddleware:
             await self.app(scope, receive, send)
             return
 
-        headers = {k.decode().lower(): v.decode() for k, v in scope.get("headers", [])}
+        # HTTP header bytes are latin-1 (RFC 9110); decoding as UTF-8 would crash on arbitrary client bytes.
+        headers = {k.decode("latin-1").lower(): v.decode("latin-1") for k, v in scope.get("headers", [])}
         incoming = headers.get(REQUEST_ID_HEADER.lower(), "")
-        rid = incoming if 8 <= len(incoming) <= 64 and incoming.replace("-", "").isalnum() else new_request_id()
+        # ASCII-only allow-list: the id is echoed in headers and logs, so never trust arbitrary input.
+        rid = incoming if _REQUEST_ID_RE.fullmatch(incoming) else new_request_id()
         set_request_id(rid)
         start = time.perf_counter()
         status_holder = {"status": 500}
 
-        declared = headers.get("content-length")
-        if declared and declared.isdigit() and int(declared) > self.max_body_bytes:
+        declared = headers.get("content-length", "")
+        if _ASCII_DIGITS_RE.fullmatch(declared) and int(declared) > self.max_body_bytes:
             response = error_response(413, "payload_too_large", "The request body is too large.")
             response.headers[REQUEST_ID_HEADER] = rid
             await response(scope, receive, send)
