@@ -1,0 +1,46 @@
+# Repo-level tooling config only (ruff, mypy, pytest defaults).
+# Each service and libs/common has its own pyproject.toml with pinned runtime dependencies.
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+extend-exclude = [".venv", "data"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "S", "SIM", "RUF", "ASYNC", "PT"]
+ignore = [
+    "S101",   # assert is fine in tests and for type narrowing
+    "S311",   # random is used for jitter, not crypto
+    "RUF001", "RUF002", "RUF003",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"**/tests/**" = ["S105", "S106", "S108"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["common", "app"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_unreachable = true
+plugins = ["pydantic.mypy"]
+namespace_packages = true
+explicit_package_bases = true
+
+[[tool.mypy.overrides]]
+module = ["rank_bm25.*", "pdfplumber.*", "pypdf.*", "voyageai.*", "sentence_transformers.*", "redis.*"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+addopts = "-q --import-mode=importlib"
+filterwarnings = ["error::DeprecationWarning:common.*", "ignore::DeprecationWarning:langsmith.*"]
+
+[tool.coverage.run]
+branch = true
+
+[tool.coverage.report]
+skip_empty = true
+show_missing = false

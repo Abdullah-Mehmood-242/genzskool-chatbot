@@ -1,0 +1,7 @@
+# Structure-aware chunking (ADR-0004). Non-secret; versioned with the code.
+max_tokens: 400            # whitespace-token estimate per chunk
+overlap_tokens: 40         # only applied when a long section is split
+min_chunk_tokens: 15       # smaller fragments are merged into the previous chunk
+context_header: true       # prepend "Course: ... | Mentor: ... | Fee: ..." to every chunk
+strip_patterns:            # page furniture removed before chunking (regex, multiline)
+  - '^Genz Skool knowledge base - crawled .* Page \d+$'

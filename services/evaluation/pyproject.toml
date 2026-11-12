@@ -1,0 +1,16 @@
+[project]
+name = "genz-evaluation"
+version = "0.1.0"
+description = "Offline and online RAG evaluation, regression gate."
+requires-python = ">=3.12"
+dynamic = ["dependencies"]
+
+[tool.setuptools.dynamic]
+dependencies = { file = ["requirements.txt"] }
+
+[tool.setuptools.packages.find]
+include = ["app*"]
+
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"

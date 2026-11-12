@@ -1,0 +1,98 @@
+{
+  "$defs": {
+    "FileOutcome": {
+      "enum": [
+        "ingested",
+        "unchanged",
+        "failed",
+        "skipped_scanned"
+      ],
+      "title": "FileOutcome",
+      "type": "string"
+    },
+    "FileReport": {
+      "properties": {
+        "chunks": {
+          "default": 0,
+          "title": "Chunks",
+          "type": "integer"
+        },
+        "doc_id": {
+          "title": "Doc Id",
+          "type": "string"
+        },
+        "error": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Error"
+        },
+        "file": {
+          "title": "File",
+          "type": "string"
+        },
+        "index_version": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Index Version"
+        },
+        "outcome": {
+          "$ref": "#/$defs/FileOutcome"
+        },
+        "warnings": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Warnings",
+          "type": "array"
+        }
+      },
+      "required": [
+        "file",
+        "doc_id",
+        "outcome"
+      ],
+      "title": "FileReport",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "files": {
+      "items": {
+        "$ref": "#/$defs/FileReport"
+      },
+      "title": "Files",
+      "type": "array"
+    },
+    "finished_at": {
+      "format": "date-time",
+      "title": "Finished At",
+      "type": "string"
+    },
+    "started_at": {
+      "format": "date-time",
+      "title": "Started At",
+      "type": "string"
+    }
+  },
+  "required": [
+    "files",
+    "started_at",
+    "finished_at"
+  ],
+  "title": "IngestReport",
+  "type": "object"
+}

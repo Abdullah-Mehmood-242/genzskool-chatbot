@@ -1,0 +1,84 @@
+# GitHub Actions workflow. Copy (or symlink) to .github/workflows/ci.yml when the repo is on GitHub.
+# Runs fully offline: LLM_PROVIDER=fake, EMBEDDING_PROVIDER=fake, no secrets required.
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  LLM_PROVIDER: fake
+  EMBEDDING_PROVIDER: fake
+  PYTHON_VERSION: "3.12"
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+          cache-dependency-path: |
+            requirements-dev.txt
+            services/*/requirements.txt
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          for f in services/*/requirements.txt; do pip install -r "$f"; done
+          pip install -r requirements-dev.txt
+      - name: Lint
+        run: python scripts/dev.py lint
+      - name: Type check (mypy --strict on libs + domain + application)
+        run: python scripts/dev.py typecheck
+      - name: Tests (unit, contract, architecture; coverage gate on domain/application)
+        run: python scripts/dev.py test
+      - name: Evaluation gate (golden set, deterministic checks)
+        run: python scripts/dev.py eval
+
+  docker-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        service: [api_gateway, ingestion, retrieval, advisor, evaluation]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - name: Build ${{ matrix.service }}
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: services/${{ matrix.service }}/Dockerfile
+          push: false
+          cache-from: type=gha,scope=${{ matrix.service }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.service }}
+
+  e2e:
+    runs-on: ubuntu-latest
+    needs: [quality, docker-build]
+    timeout-minutes: 25
+    env:
+      GATEWAY_API_KEY: ci-gateway-key-0123456789
+      ADMIN_API_KEY: ci-admin-key-0123456789
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - run: pip install -r requirements-dev.txt -r libs/common/requirements.txt
+      - run: docker compose up -d --build --wait
+      - run: sh scripts/ingest_all.sh
+      - run: python scripts/dev.py test e2e
+      - if: failure()
+        run: docker compose logs --no-color
+      - if: always()
+        run: docker compose down -v

@@ -1,0 +1,7 @@
+# Normalise text to LF in the repo and working tree (Linux containers need LF scripts/Dockerfiles).
+* text=auto eol=lf
+
+# Binary: never apply line-ending conversion (the knowledge-base PDF is the source of truth).
+*.pdf binary
+*.png binary
+*.jpg binary

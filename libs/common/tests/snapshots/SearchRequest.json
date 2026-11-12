@@ -1,0 +1,152 @@
+{
+  "$defs": {
+    "DocType": {
+      "enum": [
+        "course",
+        "mentor",
+        "policy",
+        "contact",
+        "overview"
+      ],
+      "title": "DocType",
+      "type": "string"
+    },
+    "Level": {
+      "enum": [
+        "beginner",
+        "intermediate"
+      ],
+      "title": "Level",
+      "type": "string"
+    },
+    "SearchFilters": {
+      "description": "Optional metadata filters. All set fields are ANDed.",
+      "properties": {
+        "category": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Category"
+        },
+        "course_slugs": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Course Slugs"
+        },
+        "doc_types": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/DocType"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Doc Types"
+        },
+        "level": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Level"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "max_fee_pkr": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Keeps chunks with fee <= this, or no fee.",
+          "title": "Max Fee Pkr"
+        },
+        "mentor": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Mentor"
+        }
+      },
+      "title": "SearchFilters",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "debug": {
+      "default": false,
+      "title": "Debug",
+      "type": "boolean"
+    },
+    "filters": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/SearchFilters"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "query": {
+      "maxLength": 1000,
+      "minLength": 1,
+      "title": "Query",
+      "type": "string"
+    },
+    "top_k": {
+      "anyOf": [
+        {
+          "maximum": 50,
+          "minimum": 1,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Top K"
+    }
+  },
+  "required": [
+    "query"
+  ],
+  "title": "SearchRequest",
+  "type": "object"
+}

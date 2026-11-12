@@ -1,0 +1,183 @@
+{
+  "$defs": {
+    "ChunkMetadata": {
+      "properties": {
+        "category": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Category"
+        },
+        "content_hash": {
+          "title": "Content Hash",
+          "type": "string"
+        },
+        "course_slug": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Course Slug"
+        },
+        "doc_id": {
+          "description": "Stable id of the source document (file stem).",
+          "title": "Doc Id",
+          "type": "string"
+        },
+        "doc_type": {
+          "$ref": "#/$defs/DocType"
+        },
+        "fee_pkr": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Null when the fee is not published.",
+          "title": "Fee Pkr"
+        },
+        "index_version": {
+          "minimum": 1,
+          "title": "Index Version",
+          "type": "integer"
+        },
+        "ingested_at": {
+          "format": "date-time",
+          "title": "Ingested At",
+          "type": "string"
+        },
+        "level": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Level"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "mentor": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Mentor"
+        },
+        "page": {
+          "minimum": 1,
+          "title": "Page",
+          "type": "integer"
+        },
+        "section": {
+          "title": "Section",
+          "type": "string"
+        },
+        "source_file": {
+          "title": "Source File",
+          "type": "string"
+        }
+      },
+      "required": [
+        "doc_id",
+        "source_file",
+        "page",
+        "section",
+        "doc_type",
+        "content_hash",
+        "ingested_at",
+        "index_version"
+      ],
+      "title": "ChunkMetadata",
+      "type": "object"
+    },
+    "DocType": {
+      "enum": [
+        "course",
+        "mentor",
+        "policy",
+        "contact",
+        "overview"
+      ],
+      "title": "DocType",
+      "type": "string"
+    },
+    "Level": {
+      "enum": [
+        "beginner",
+        "intermediate"
+      ],
+      "title": "Level",
+      "type": "string"
+    },
+    "RetrievedChunk": {
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "metadata": {
+          "$ref": "#/$defs/ChunkMetadata"
+        },
+        "score": {
+          "description": "Normalised relevance score in [0, 1].",
+          "title": "Score",
+          "type": "number"
+        },
+        "text": {
+          "title": "Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "text",
+        "score",
+        "metadata"
+      ],
+      "title": "RetrievedChunk",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "chunks": {
+      "description": "Empty when nothing clears the threshold.",
+      "items": {
+        "$ref": "#/$defs/RetrievedChunk"
+      },
+      "title": "Chunks",
+      "type": "array"
+    },
+    "retrieval_debug": {
+      "additionalProperties": true,
+      "title": "Retrieval Debug",
+      "type": "object"
+    }
+  },
+  "required": [
+    "chunks"
+  ],
+  "title": "SearchResponse",
+  "type": "object"
+}

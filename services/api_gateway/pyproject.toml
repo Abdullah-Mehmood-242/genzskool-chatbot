@@ -1,0 +1,16 @@
+[project]
+name = "genz-api-gateway"
+version = "0.1.0"
+description = "Public edge: auth, rate limiting, CORS, routing."
+requires-python = ">=3.12"
+dynamic = ["dependencies"]
+
+[tool.setuptools.dynamic]
+dependencies = { file = ["requirements.txt"] }
+
+[tool.setuptools.packages.find]
+include = ["app*"]
+
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"

@@ -1,0 +1,16 @@
+# Advisor behaviour (non-secret).
+max_clarifying_questions: 2
+max_history_turns: 6
+regenerate_on_ungrounded: 1          # regenerate attempts before the safe fallback
+handoff:
+  whatsapp: "0309-4190245"
+  whatsapp_link: "https://wa.me/923094190245"
+  email: "info@genzskool.com"
+  hours: "Mon-Sat, 10am-8pm"
+confirm_reminder: "Please confirm current batches and fees on WhatsApp 0309-4190245."
+# Prerequisite-style sequencing used by the deterministic recommender (earlier first).
+sequencing:
+  - [digital-marketing, shopify]
+  - [digital-marketing, tiktok-shop]
+  - [graphic-design, video-editing]
+  - [ai-automation, tiktok-automation]

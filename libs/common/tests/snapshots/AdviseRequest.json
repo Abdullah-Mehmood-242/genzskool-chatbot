@@ -1,0 +1,23 @@
+{
+  "properties": {
+    "message": {
+      "maxLength": 2000,
+      "minLength": 1,
+      "title": "Message",
+      "type": "string"
+    },
+    "session_id": {
+      "maxLength": 64,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_\\-]+$",
+      "title": "Session Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "session_id",
+    "message"
+  ],
+  "title": "AdviseRequest",
+  "type": "object"
+}

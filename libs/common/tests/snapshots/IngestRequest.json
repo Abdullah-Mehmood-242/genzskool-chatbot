@@ -1,0 +1,25 @@
+{
+  "properties": {
+    "file": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "File name inside PDF_DIR; omit to ingest all PDFs.",
+      "title": "File"
+    },
+    "force": {
+      "default": false,
+      "description": "Re-ingest even if the content hash is unchanged.",
+      "title": "Force",
+      "type": "boolean"
+    }
+  },
+  "title": "IngestRequest",
+  "type": "object"
+}

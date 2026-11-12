@@ -1,0 +1,9 @@
+# Pinned development tooling (tests, lint, types). Runtime deps live in services/*/requirements.txt.
+pytest==9.2.0
+pytest-asyncio==1.4.1.post1
+pytest-cov==7.1.0
+respx==0.23.1
+ruff==0.17.4
+mypy==2.4.1
+types-PyYAML==6.0.12.20261111
+pre-commit==4.7.0

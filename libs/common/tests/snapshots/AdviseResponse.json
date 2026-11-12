@@ -1,0 +1,160 @@
+{
+  "$defs": {
+    "Citation": {
+      "properties": {
+        "chunk_id": {
+          "title": "Chunk Id",
+          "type": "string"
+        },
+        "doc": {
+          "title": "Doc",
+          "type": "string"
+        },
+        "section": {
+          "title": "Section",
+          "type": "string"
+        }
+      },
+      "required": [
+        "chunk_id",
+        "doc",
+        "section"
+      ],
+      "title": "Citation",
+      "type": "object"
+    },
+    "Intent": {
+      "enum": [
+        "course_recommendation",
+        "course_info",
+        "fees_and_payment",
+        "enrollment",
+        "certificate",
+        "mentor_info",
+        "contact",
+        "out_of_scope",
+        "chit_chat",
+        "unsafe"
+      ],
+      "title": "Intent",
+      "type": "string"
+    },
+    "RecommendedCourse": {
+      "properties": {
+        "course_slug": {
+          "title": "Course Slug",
+          "type": "string"
+        },
+        "fee_pkr": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Fee Pkr"
+        },
+        "mentor": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Mentor"
+        },
+        "order": {
+          "minimum": 1,
+          "title": "Order",
+          "type": "integer"
+        },
+        "reason": {
+          "title": "Reason",
+          "type": "string"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        }
+      },
+      "required": [
+        "course_slug",
+        "title",
+        "fee_pkr",
+        "mentor",
+        "order",
+        "reason"
+      ],
+      "title": "RecommendedCourse",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "answer": {
+      "title": "Answer",
+      "type": "string"
+    },
+    "citations": {
+      "items": {
+        "$ref": "#/$defs/Citation"
+      },
+      "title": "Citations",
+      "type": "array"
+    },
+    "clarifying_questions": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 2,
+      "title": "Clarifying Questions",
+      "type": "array"
+    },
+    "fallback_used": {
+      "default": false,
+      "title": "Fallback Used",
+      "type": "boolean"
+    },
+    "grounded": {
+      "default": true,
+      "title": "Grounded",
+      "type": "boolean"
+    },
+    "intent": {
+      "$ref": "#/$defs/Intent"
+    },
+    "recommendations": {
+      "items": {
+        "$ref": "#/$defs/RecommendedCourse"
+      },
+      "title": "Recommendations",
+      "type": "array"
+    },
+    "session_id": {
+      "title": "Session Id",
+      "type": "string"
+    },
+    "total_fee_pkr": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Total Fee Pkr"
+    }
+  },
+  "required": [
+    "session_id",
+    "answer",
+    "intent"
+  ],
+  "title": "AdviseResponse",
+  "type": "object"
+}

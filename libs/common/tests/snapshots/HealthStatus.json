@@ -1,0 +1,31 @@
+{
+  "properties": {
+    "checks": {
+      "additionalProperties": {
+        "type": "boolean"
+      },
+      "title": "Checks",
+      "type": "object"
+    },
+    "service": {
+      "title": "Service",
+      "type": "string"
+    },
+    "status": {
+      "description": "'ok' or 'degraded' or 'unavailable'.",
+      "title": "Status",
+      "type": "string"
+    },
+    "version": {
+      "title": "Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "status",
+    "service",
+    "version"
+  ],
+  "title": "HealthStatus",
+  "type": "object"
+}

@@ -1,0 +1,7 @@
+# Hybrid retrieval (ADR-0003). Non-secret; versioned with the code.
+top_k: 5                   # chunks returned to the caller
+candidate_k: 20            # candidates fetched from each retriever before fusion
+fusion_k: 60               # RRF constant
+score_threshold: 0.3       # on the normalised fused score in [0, 1]; below -> dropped
+use_reranker: false
+use_query_rewrite: false

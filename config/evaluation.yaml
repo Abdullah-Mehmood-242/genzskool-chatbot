@@ -1,0 +1,10 @@
+# Regression gate thresholds (ADR-0008). `make eval` exits non-zero if any is missed.
+thresholds:
+  faithfulness: 0.90
+  fact_accuracy: 0.95
+  hit_rate_at_5: 0.90
+k: 5
+# Rough token pricing used for the cost estimate (USD per 1M tokens). Set to your provider's prices.
+cost_per_mtok:
+  input: 0.0
+  output: 0.0

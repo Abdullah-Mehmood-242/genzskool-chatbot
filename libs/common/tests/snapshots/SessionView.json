@@ -1,0 +1,114 @@
+{
+  "$defs": {
+    "LearnerProfileDTO": {
+      "properties": {
+        "budget_pkr": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Budget Pkr"
+        },
+        "device": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Device"
+        },
+        "experience_level": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Experience Level"
+        },
+        "goal": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Goal"
+        },
+        "interests": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Interests",
+          "type": "array"
+        },
+        "language": {
+          "default": "en",
+          "title": "Language",
+          "type": "string"
+        },
+        "preferred_batch_time": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Preferred Batch Time"
+        },
+        "weekly_hours": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Weekly Hours"
+        }
+      },
+      "title": "LearnerProfileDTO",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "profile": {
+      "$ref": "#/$defs/LearnerProfileDTO"
+    },
+    "session_id": {
+      "title": "Session Id",
+      "type": "string"
+    },
+    "turns": {
+      "title": "Turns",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "session_id",
+    "profile",
+    "turns"
+  ],
+  "title": "SessionView",
+  "type": "object"
+}

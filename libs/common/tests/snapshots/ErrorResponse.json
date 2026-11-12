@@ -1,0 +1,52 @@
+{
+  "$defs": {
+    "ErrorDetail": {
+      "properties": {
+        "code": {
+          "description": "Stable machine-readable error code.",
+          "title": "Code",
+          "type": "string"
+        },
+        "details": {
+          "additionalProperties": true,
+          "title": "Details",
+          "type": "object"
+        },
+        "message": {
+          "description": "Human-readable message, safe to show to clients.",
+          "title": "Message",
+          "type": "string"
+        },
+        "request_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Request Id"
+        }
+      },
+      "required": [
+        "code",
+        "message"
+      ],
+      "title": "ErrorDetail",
+      "type": "object"
+    }
+  },
+  "description": "The single error schema returned by every service.",
+  "properties": {
+    "error": {
+      "$ref": "#/$defs/ErrorDetail"
+    }
+  },
+  "required": [
+    "error"
+  ],
+  "title": "ErrorResponse",
+  "type": "object"
+}

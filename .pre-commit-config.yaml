@@ -1,0 +1,33 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: detect-private-key
+      - id: check-added-large-files
+        args: ["--maxkb=2048"]
+      - id: check-yaml
+        args: ["--allow-multiple-documents"]
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: check-merge-conflict
+
+  # Local hooks use the pinned tools from requirements-dev.txt (no version drift).
+  - repo: local
+    hooks:
+      - id: ruff
+        name: ruff (lint + format check)
+        entry: python scripts/dev.py lint
+        language: system
+        pass_filenames: false
+        types: [python]
+      - id: mypy
+        name: mypy --strict (libs + domain + application)
+        entry: python scripts/dev.py typecheck
+        language: system
+        pass_filenames: false
+        types: [python]
+      - id: no-env-file
+        name: forbid committing .env
+        entry: .env files must not be committed
+        language: fail
+        files: (^|/)\.env$

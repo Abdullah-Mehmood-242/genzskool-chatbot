@@ -1,0 +1,15 @@
+.env
+__pycache__/
+*.pyc
+.venv/
+.venv-*/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+data/vectorstore/*
+!data/vectorstore/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+.coverage
+htmlcov/
+coverage.xml

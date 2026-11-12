@@ -1,0 +1,57 @@
+{
+  "$defs": {
+    "DocumentStatus": {
+      "properties": {
+        "active_index_version": {
+          "title": "Active Index Version",
+          "type": "integer"
+        },
+        "chunks": {
+          "title": "Chunks",
+          "type": "integer"
+        },
+        "content_hash": {
+          "title": "Content Hash",
+          "type": "string"
+        },
+        "doc_id": {
+          "title": "Doc Id",
+          "type": "string"
+        },
+        "ingested_at": {
+          "format": "date-time",
+          "title": "Ingested At",
+          "type": "string"
+        },
+        "source_file": {
+          "title": "Source File",
+          "type": "string"
+        }
+      },
+      "required": [
+        "doc_id",
+        "source_file",
+        "content_hash",
+        "active_index_version",
+        "chunks",
+        "ingested_at"
+      ],
+      "title": "DocumentStatus",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "documents": {
+      "items": {
+        "$ref": "#/$defs/DocumentStatus"
+      },
+      "title": "Documents",
+      "type": "array"
+    }
+  },
+  "required": [
+    "documents"
+  ],
+  "title": "IngestStatus",
+  "type": "object"
+}
