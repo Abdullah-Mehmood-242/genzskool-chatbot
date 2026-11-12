@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
 from dataclasses import dataclass
 
-from fastapi import APIRouter
+from fastapi import APIRouter, FastAPI
 
 from app.settings import Settings
 from common.observability import ReadinessCheck
@@ -19,6 +21,10 @@ class Container:
 
     def routers(self) -> list[APIRouter]:
         return []
+
+    @asynccontextmanager
+    async def lifespan(self, _: FastAPI) -> AsyncIterator[None]:
+        yield
 
 
 def build_container(settings: Settings) -> Container:

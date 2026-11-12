@@ -41,7 +41,7 @@ typecheck:
 
 check: lint typecheck test
 
-ingest:        ## index data/pdfs via the running ingestion service
+ingest:        ## trigger ingestion on the running stack (auto-ingest also runs on start/change)
 	sh scripts/ingest_all.sh
 
 eval:          ## golden-set evaluation; non-zero exit if a threshold is missed

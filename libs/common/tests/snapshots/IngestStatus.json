@@ -1,5 +1,98 @@
 {
   "$defs": {
+    "AutoIngestStatus": {
+      "description": "State of the background auto-ingester (startup run + PDF folder watcher).",
+      "properties": {
+        "consecutive_failures": {
+          "default": 0,
+          "title": "Consecutive Failures",
+          "type": "integer"
+        },
+        "last_error": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Last Error"
+        },
+        "last_ok": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Last Ok"
+        },
+        "last_run_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Last Run At"
+        },
+        "last_trigger": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/AutoIngestTrigger"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "on_startup": {
+          "title": "On Startup",
+          "type": "boolean"
+        },
+        "prune_deleted": {
+          "title": "Prune Deleted",
+          "type": "boolean"
+        },
+        "runs": {
+          "default": 0,
+          "title": "Runs",
+          "type": "integer"
+        },
+        "watch_interval_s": {
+          "description": "0 means the folder watcher is disabled.",
+          "title": "Watch Interval S",
+          "type": "number"
+        }
+      },
+      "required": [
+        "on_startup",
+        "watch_interval_s",
+        "prune_deleted"
+      ],
+      "title": "AutoIngestStatus",
+      "type": "object"
+    },
+    "AutoIngestTrigger": {
+      "enum": [
+        "startup",
+        "file_change",
+        "index_drift",
+        "retry"
+      ],
+      "title": "AutoIngestTrigger",
+      "type": "string"
+    },
     "DocumentStatus": {
       "properties": {
         "active_index_version": {
@@ -41,6 +134,17 @@
     }
   },
   "properties": {
+    "auto_ingest": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/AutoIngestStatus"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
     "documents": {
       "items": {
         "$ref": "#/$defs/DocumentStatus"

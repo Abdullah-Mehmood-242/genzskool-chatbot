@@ -23,6 +23,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         version=settings.service_version,
         readiness_checks=container.readiness_checks(),
         max_body_bytes=settings.max_body_bytes,
+        lifespan=container.lifespan,
     )
     app.state.settings = settings
     app.state.container = container

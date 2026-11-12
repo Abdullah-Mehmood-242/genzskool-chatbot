@@ -5,7 +5,7 @@ from __future__ import annotations
 from datetime import datetime
 from enum import StrEnum
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, computed_field
 
 
 class IngestRequest(BaseModel):
@@ -32,11 +32,14 @@ class FileReport(BaseModel):
 
 class IngestReport(BaseModel):
     files: list[FileReport]
+    pruned: list[str] = Field(default_factory=list, description="doc_ids removed because their PDF was deleted.")
     started_at: datetime
     finished_at: datetime
 
+    @computed_field  # type: ignore[prop-decorator]
     @property
     def ok(self) -> bool:
+        """False if any file failed. Unchanged and scanned-skipped files are not failures."""
         return all(f.outcome != FileOutcome.FAILED for f in self.files)
 
 
@@ -49,5 +52,27 @@ class DocumentStatus(BaseModel):
     ingested_at: datetime
 
 
+class AutoIngestTrigger(StrEnum):
+    STARTUP = "startup"
+    FILE_CHANGE = "file_change"
+    INDEX_DRIFT = "index_drift"
+    RETRY = "retry"
+
+
+class AutoIngestStatus(BaseModel):
+    """State of the background auto-ingester (startup run + PDF folder watcher)."""
+
+    on_startup: bool
+    watch_interval_s: float = Field(description="0 means the folder watcher is disabled.")
+    prune_deleted: bool
+    runs: int = 0
+    last_run_at: datetime | None = None
+    last_trigger: AutoIngestTrigger | None = None
+    last_ok: bool | None = None
+    last_error: str | None = None
+    consecutive_failures: int = 0
+
+
 class IngestStatus(BaseModel):
     documents: list[DocumentStatus]
+    auto_ingest: AutoIngestStatus | None = None

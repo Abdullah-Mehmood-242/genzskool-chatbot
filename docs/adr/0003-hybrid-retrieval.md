@@ -12,7 +12,9 @@ BM25 also carries retrieval quality on its own.
 ## Decision
 - Dense search via the `DenseRetriever` port (Qdrant).
 - Sparse search via `SparseRetriever` using `rank_bm25` over the chunk texts loaded from
-  `data/processed/chunks.jsonl` (the same artifact ingestion writes). Rebuilt on startup and on
+  the active chunk files ingestion writes: `data/processed/registry.json` names the active
+  `index_version` per document and `data/processed/<doc_id>.v<N>.chunks.jsonl` holds its chunks
+  (ADR-0011). Dense results are filtered to the same active versions. Rebuilt on startup and on
   index-version change.
 - Fuse with Reciprocal Rank Fusion: `score(d) = sum 1 / (fusion_k + rank_i(d))`, `fusion_k = 60`.
 - Then metadata filter, optional reranker (port, disabled by default), then `score_threshold`.

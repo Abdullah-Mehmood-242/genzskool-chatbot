@@ -73,6 +73,14 @@ class ProviderError(UpstreamError):
     default_message = "The AI provider request failed."
 
 
+class TransientProviderError(ProviderError):
+    """A provider failure worth retrying (rate limit, 5xx, network). Non-transient ones are not retried."""
+
+    code = "provider_unavailable"
+    status_code = 503
+    default_message = "The AI provider is temporarily unavailable."
+
+
 class UpstreamTimeout(UpstreamError):
     code = "upstream_timeout"
     status_code = 504
@@ -108,6 +116,7 @@ __all__ = [
     "ProviderError",
     "RateLimited",
     "ServiceUnavailable",
+    "TransientProviderError",
     "Unauthorized",
     "UpstreamError",
     "UpstreamTimeout",

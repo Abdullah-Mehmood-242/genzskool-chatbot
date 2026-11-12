@@ -13,11 +13,16 @@ def _load(**kw: object) -> Settings:
     return load_settings(Settings, _env_file=None, **kw)
 
 
-def test_defaults() -> None:
+def test_defaults(monkeypatch: pytest.MonkeyPatch) -> None:
+    for var in ("PDF_DIR", "VECTOR_STORE", "AUTO_INGEST_ON_STARTUP", "AUTO_INGEST_INTERVAL_S"):
+        monkeypatch.delenv(var, raising=False)
     s = _load(embedding_provider="fake")
     assert s.service_name == "ingestion"
     assert s.pdf_dir == Path("data/pdfs")
     assert s.vector_store == "qdrant"
+    assert s.auto_ingest_on_startup is True
+    assert s.auto_ingest_interval_s == 30.0
+    assert s.auto_ingest_prune is True
 
 
 def test_real_embedding_provider_needs_key_and_model() -> None:

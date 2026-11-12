@@ -15,8 +15,9 @@ Anthropic (the default LLM) has no embeddings endpoint. The stack must also run 
 - `fake` LLM: deterministic, template-based answer built only from the evidence passed in
   (extracts the relevant fee/mentor lines and cites them). It is grounded by construction, which
   lets the evaluation gate run in CI without keys.
-- Real SDKs (`anthropic`, `openai`, `voyageai`, `sentence-transformers`) are imported lazily
-  inside their adapters, so they are optional installs and the default image stays small.
+- Embedding clients are shared by ingestion and retrieval in `common.embeddings` (ADR-0012).
+  Voyage and OpenAI embeddings use plain `httpx` REST calls (no SDK); `sentence-transformers` is an
+  optional package imported lazily. LLM SDKs stay inside the advisor's adapters.
 - Adapters are chosen in one factory per service, keyed by the setting. Adding a provider =
   new adapter + one factory entry (Open/Closed).
 

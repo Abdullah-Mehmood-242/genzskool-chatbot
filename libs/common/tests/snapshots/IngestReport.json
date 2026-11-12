@@ -82,6 +82,14 @@
       "title": "Finished At",
       "type": "string"
     },
+    "pruned": {
+      "description": "doc_ids removed because their PDF was deleted.",
+      "items": {
+        "type": "string"
+      },
+      "title": "Pruned",
+      "type": "array"
+    },
     "started_at": {
       "format": "date-time",
       "title": "Started At",

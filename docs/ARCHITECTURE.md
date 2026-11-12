@@ -49,7 +49,7 @@ flowchart TB
     end
 
     pdfs[/data/pdfs/] --> ing
-    ing -->|chunks JSONL| proc[/data/processed/]
+    ing -->|registry.json +<br/>chunk JSONL| proc[/data/processed/]
     gw -->|/v1/advise| adv
     gw -->|/v1/ingest admin| ing
     adv -->|/v1/search| ret
@@ -109,17 +109,21 @@ third-party except `pydantic` and `typing`. This is enforced by `tests/architect
 
 ```mermaid
 flowchart LR
-    pdf[PDF] --> load[PdfLoader<br/>pdfplumber, fallback pypdf]
-    load -->|pages + tables| clean[TextCleaner<br/>strip footers, join wrapped cells]
+    trig([startup / folder watcher /<br/>drift check / POST v1/ingest]) --> svc
+    svc[IngestionService<br/>one at a time] --> load
+    load[PdfPlumberLoader<br/>pdfplumber, fallback pypdf] -->|pages + tables| clean[StandardTextCleaner<br/>NFKC, strip footers]
     clean --> chunk[StructureAwareChunker<br/>course / mentor / policy /<br/>contact / overview]
     chunk --> hdr[Context header +<br/>metadata + content_hash]
-    hdr --> jsonl[/data/processed/chunks.jsonl/]
-    hdr --> embed[EmbeddingProvider<br/>retry with backoff]
-    embed --> upsert[VectorStore.upsert<br/>index_version N+1]
-    upsert --> swap[Registry: activate N+1,<br/>delete N]
+    hdr --> embed[EmbeddingProvider<br/>batched, retry with backoff]
+    embed --> upsert[VectorStore.upsert<br/>index_version N+1, verify count]
+    upsert --> jsonl[/data/processed/doc.vN+1.chunks.jsonl/]
+    jsonl --> swap[registry.json: activate N+1,<br/>then delete N]
 ```
 
-- **Idempotent**: the registry stores the file's `content_hash`; an unchanged file is a no-op.
+- **Auto-ingest** (ADR-0011): on startup, then every `AUTO_INGEST_INTERVAL_S` the PDF folder is
+  re-checked; new/changed PDFs are ingested, deleted ones pruned, and lost vectors re-created.
+- **Idempotent**: the registry stores the file's `content_hash`; an unchanged file is a no-op
+  (unless its vectors are missing, which triggers a self-healing re-ingest).
 - **Blue/green**: new chunks are written under `index_version = N+1`; only after a full
   successful upsert does the registry flip the active version and delete version N. A partial
   failure leaves version N serving.
@@ -212,3 +216,5 @@ See `docs/adr/`:
 | 0008 | Evaluation gate in CI with deterministic checks |
 | 0009 | Supporting dependencies outside Section 4 (pydantic-settings, PyYAML, prometheus-client) |
 | 0010 | Shared-library packaging and per-service `app` package layout |
+| 0011 | Auto-ingest: startup run, PDF folder watcher, prune deleted, drift self-heal |
+| 0012 | Embedding clients shared in `libs/common` so ingestion and retrieval cannot drift |

@@ -9,7 +9,11 @@ from app.settings import Settings
 async def test_health_endpoints() -> None:
     app = create_app(Settings(_env_file=None))  # type: ignore[call-arg]
     transport = httpx.ASGITransport(app=app)
-    async with httpx.AsyncClient(transport=transport, base_url="http://test") as client:
+    # readiness waits for the startup phase of auto-ingest, which runs in the lifespan
+    async with (
+        app.router.lifespan_context(app),
+        httpx.AsyncClient(transport=transport, base_url="http://test") as client,
+    ):
         health = await client.get("/healthz")
         ready = await client.get("/readyz")
         metrics = await client.get("/metrics")

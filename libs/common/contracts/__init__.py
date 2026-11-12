@@ -13,6 +13,8 @@ from common.contracts.advisor import (
 from common.contracts.chunks import Chunk, ChunkMetadata, DocType, Level
 from common.contracts.errors import Envelope, ErrorDetail, ErrorResponse, HealthStatus
 from common.contracts.ingestion import (
+    AutoIngestStatus,
+    AutoIngestTrigger,
     DocumentStatus,
     FileOutcome,
     FileReport,
@@ -26,6 +28,8 @@ __all__ = [
     "MAX_MESSAGE_CHARS",
     "AdviseRequest",
     "AdviseResponse",
+    "AutoIngestStatus",
+    "AutoIngestTrigger",
     "Chunk",
     "ChunkMetadata",
     "Citation",

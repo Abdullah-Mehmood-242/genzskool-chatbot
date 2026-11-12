@@ -19,6 +19,7 @@ from common.errors import (
     ProviderError,
     RateLimited,
     ServiceUnavailable,
+    TransientProviderError,
     Unauthorized,
     UpstreamError,
     UpstreamTimeout,
@@ -36,6 +37,7 @@ CASES: list[tuple[type[AppError], str, int]] = [
     (RateLimited, "rate_limited", 429),
     (UpstreamError, "upstream_error", 502),
     (ProviderError, "provider_error", 502),
+    (TransientProviderError, "provider_unavailable", 503),
     (UpstreamTimeout, "upstream_timeout", 504),
     (ServiceUnavailable, "service_unavailable", 503),
     (CircuitOpen, "circuit_open", 503),
@@ -74,6 +76,7 @@ def test_codes_are_unique() -> None:
 
 def test_hierarchy() -> None:
     assert issubclass(ProviderError, UpstreamError)
+    assert issubclass(TransientProviderError, ProviderError)
     assert issubclass(UpstreamTimeout, UpstreamError)
     assert issubclass(CircuitOpen, ServiceUnavailable)
     assert all(issubclass(cls, AppError) for cls, _, _ in CASES)

@@ -9,6 +9,7 @@ Usage:
     python scripts/dev.py lint                  # ruff check + format check
     python scripts/dev.py fmt                   # ruff fix + format
     python scripts/dev.py typecheck             # mypy --strict on libs/ + domain/ + application/
+    python scripts/dev.py ingest [--force]      # trigger ingestion on the running stack
     python scripts/dev.py smoke-local           # boot every service with uvicorn and probe it
     python scripts/dev.py check                 # lint + typecheck + test
 """
@@ -104,6 +105,30 @@ def typecheck() -> int:
     return rc
 
 
+def ingest(args: list[str]) -> int:
+    """POST /v1/ingest to the running ingestion service (Windows-friendly twin of ingest_all.sh)."""
+    import json
+    import urllib.error
+    import urllib.request
+
+    url = os.environ.get("INGESTION_URL", "http://127.0.0.1:8001") + "/v1/ingest"
+    body = json.dumps({"force": "--force" in args}).encode()
+    req = urllib.request.Request(url, data=body, headers={"Content-Type": "application/json"}, method="POST")  # noqa: S310
+    try:
+        with urllib.request.urlopen(req, timeout=300) as resp:  # noqa: S310 - local service URL
+            report = json.load(resp)
+    except (urllib.error.URLError, OSError) as exc:
+        print(f"ingest request to {url} failed ({exc}); is the stack up? (make up)", file=sys.stderr)
+        return 1
+    for f in report["files"]:
+        extra = f["error"] or "; ".join(f["warnings"])
+        print(f"{f['outcome']:<16} {f['file']:<45} chunks={f['chunks']:<4} v={f['index_version']} {extra}")
+    for doc in report["pruned"]:
+        print(f"{'pruned':<16} {doc}")
+    print("OK" if report["ok"] else "FAILED")
+    return 0 if report["ok"] else 1
+
+
 def main(argv: list[str]) -> int:
     if not argv:
         print(__doc__)
@@ -117,6 +142,8 @@ def main(argv: list[str]) -> int:
         return fmt()
     if cmd == "typecheck":
         return typecheck()
+    if cmd == "ingest":
+        return ingest(rest)
     if cmd == "smoke-local":
         return _run([sys.executable, str(ROOT / "scripts" / "smoke_local.py")])
     if cmd == "check":

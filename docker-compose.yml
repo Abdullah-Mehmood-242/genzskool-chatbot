@@ -3,7 +3,8 @@
 # Values come from .env (compose reads it automatically for ${...} interpolation).
 #
 #   make up        # build + start, waits for health checks
-#   make ingest    # index data/pdfs
+#   (auto)         # ingestion indexes data/pdfs on startup and re-indexes on changes
+#   make ingest    # trigger an ingest explicitly (prints a report)
 #   curl -H "X-API-Key: $GATEWAY_API_KEY" -X POST localhost:8000/api/chat \
 #        -H "Content-Type: application/json" -d '{"session_id":"demo","message":"How do I enroll?"}'
 
@@ -52,6 +53,12 @@ services:
     environment:
       <<: [*common-env, *embedding-env]
       PDF_DIR: /app/data/pdfs
+      # Auto-ingest (ADR-0011): index on startup, then watch data/pdfs for new/changed/deleted PDFs.
+      AUTO_INGEST_ON_STARTUP: ${AUTO_INGEST_ON_STARTUP:-true}
+      AUTO_INGEST_INTERVAL_S: ${AUTO_INGEST_INTERVAL_S:-15}
+      AUTO_INGEST_PRUNE: ${AUTO_INGEST_PRUNE:-true}
+      EMBED_BATCH_SIZE: ${EMBED_BATCH_SIZE:-64}
+      EMBED_RETRY_ATTEMPTS: ${EMBED_RETRY_ATTEMPTS:-3}
     volumes:
       - ./data/pdfs:/app/data/pdfs:ro
       - ./data/processed:/app/data/processed
