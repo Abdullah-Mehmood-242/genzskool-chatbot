@@ -9,6 +9,7 @@ from common.contracts.advisor import (
     LearnerProfileDTO,
     RecommendedCourse,
     SessionView,
+    Usage,
 )
 from common.contracts.chunks import Chunk, ChunkMetadata, DocType, Level
 from common.contracts.errors import Envelope, ErrorDetail, ErrorResponse, HealthStatus
@@ -53,4 +54,5 @@ __all__ = [
     "SearchRequest",
     "SearchResponse",
     "SessionView",
+    "Usage",
 ]

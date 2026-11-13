@@ -218,3 +218,4 @@ See `docs/adr/`:
 | 0010 | Shared-library packaging and per-service `app` package layout |
 | 0011 | Auto-ingest: startup run, PDF folder watcher, prune deleted, drift self-heal |
 | 0012 | Embedding clients shared in `libs/common` so ingestion and retrieval cannot drift |
+| 0013 | Advisor flow, LLM adapters (official Anthropic SDK), streaming only after verification |

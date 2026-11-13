@@ -39,7 +39,7 @@ def test_schema_is_pinned(model: type[BaseModel]) -> None:
     current = json.dumps(model.model_json_schema(), indent=2, sort_keys=True)
     if os.environ.get("UPDATE_SNAPSHOTS") == "1" or not path.exists():
         SNAPSHOT_DIR.mkdir(exist_ok=True)
-        path.write_text(current + "\n", encoding="utf-8")
+        path.write_text(current + "\n", encoding="utf-8", newline="\n")  # LF on every OS (no git churn)
     assert path.read_text(encoding="utf-8").strip() == current, f"{model.__name__} schema changed"
 
 

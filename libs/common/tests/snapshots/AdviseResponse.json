@@ -91,6 +91,35 @@
       ],
       "title": "RecommendedCourse",
       "type": "object"
+    },
+    "Usage": {
+      "description": "LLM usage for one advise call (cost estimation and evaluation).",
+      "properties": {
+        "input_tokens": {
+          "default": 0,
+          "title": "Input Tokens",
+          "type": "integer"
+        },
+        "llm_calls": {
+          "default": 0,
+          "title": "Llm Calls",
+          "type": "integer"
+        },
+        "model": {
+          "title": "Model",
+          "type": "string"
+        },
+        "output_tokens": {
+          "default": 0,
+          "title": "Output Tokens",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "model"
+      ],
+      "title": "Usage",
+      "type": "object"
     }
   },
   "properties": {
@@ -126,6 +155,11 @@
     "intent": {
       "$ref": "#/$defs/Intent"
     },
+    "language": {
+      "default": "en",
+      "title": "Language",
+      "type": "string"
+    },
     "recommendations": {
       "items": {
         "$ref": "#/$defs/RecommendedCourse"
@@ -148,6 +182,17 @@
       ],
       "default": null,
       "title": "Total Fee Pkr"
+    },
+    "usage": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Usage"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
     }
   },
   "required": [

@@ -53,6 +53,15 @@ class LearnerProfileDTO(BaseModel):
     language: str = "en"
 
 
+class Usage(BaseModel):
+    """LLM usage for one advise call (cost estimation and evaluation)."""
+
+    model: str
+    llm_calls: int = 0
+    input_tokens: int = 0
+    output_tokens: int = 0
+
+
 class AdviseResponse(BaseModel):
     session_id: str
     answer: str
@@ -63,6 +72,8 @@ class AdviseResponse(BaseModel):
     clarifying_questions: list[str] = Field(default_factory=list, max_length=2)
     grounded: bool = True
     fallback_used: bool = False
+    language: str = "en"
+    usage: Usage | None = None
 
 
 class SessionView(BaseModel):

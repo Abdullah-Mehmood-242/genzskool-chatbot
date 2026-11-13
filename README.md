@@ -15,13 +15,13 @@ Built as five small hexagonal (ports and adapters) microservices. Everything run
 | 1. Foundation | shared contracts, logging, errors, settings, Docker, CI | done |
 | 2. Ingestion | PDF to chunks to vectors, **auto-ingest** (startup, folder watcher, self-heal) | done |
 | 3. Retrieval | hybrid dense + BM25 search, RRF, filters, thresholds, degradation | done |
-| 4. Advisor | LangGraph flow, recommendation rules, grounding check, sessions | next |
-| 5. Gateway | auth, rate limiting, streaming, resilience | planned |
+| 4. Advisor | LangGraph flow, deterministic recommendations, grounding check, sessions, SSE | done |
+| 5. Gateway | auth, rate limiting, streaming, resilience | next |
 | 6. Evaluation | golden set, metrics, CI gate | planned (retrieval gate already active) |
 | 7. Hardening | docs, security tests, end-to-end chat | planned |
 
-Until Phases 4-5 land, the chat endpoint is not available; ingestion (`:8001`) and retrieval
-(`:8002`) are fully usable.
+Until Phase 5 lands, talk to the advisor directly on `:8003` (the public gateway on `:8000` comes
+next); ingestion (`:8001`) and retrieval (`:8002`) are fully usable too.
 
 ## Architecture
 
@@ -75,6 +75,10 @@ curl -s localhost:8002/v1/search -H 'Content-Type: application/json' \
 curl -s localhost:8002/v1/search -H 'Content-Type: application/json' \
   -d '{"query": "beginner courses", "filters": {"max_fee_pkr": 30000, "doc_types": ["course"]}}'
 
+# Ask the advisor (grounded answer with citations; refuses out-of-scope questions)
+curl -s localhost:8003/v1/advise -H 'Content-Type: application/json'   -d '{"session_id": "demo", "message": "Shopify or TikTok Shop? Budget is Rs. 30,000."}'
+curl -sN localhost:8003/v1/advise/stream -H 'Content-Type: application/json'   -d '{"session_id": "demo", "message": "How do I enroll?"}'     # Server-Sent Events
+
 make ingest                     # force a report: sh scripts/ingest_all.sh (Windows: python scripts/dev.py ingest)
 make down
 ```
@@ -89,7 +93,7 @@ Only `.env` changes. Pick providers, set their keys and models, then re-ingest
 ```dotenv
 LLM_PROVIDER=anthropic          # anthropic | openai | ollama | fake
 LLM_API_KEY=...
-LLM_MODEL=...
+LLM_MODEL=claude-opus-5-5
 EMBEDDING_PROVIDER=voyage       # voyage | openai | sentence_transformers | fake
 EMBEDDING_API_KEY=...
 EMBEDDING_MODEL=...

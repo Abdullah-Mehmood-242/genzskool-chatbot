@@ -1,16 +1,65 @@
-# Advisor behaviour (non-secret).
+# Advisor behaviour (non-secret). Business tuning lives here; safety rules live in code + prompts/.
 max_clarifying_questions: 2
 max_history_turns: 6
+max_recommendations: 3
 regenerate_on_ungrounded: 1          # regenerate attempts before the safe fallback
+prompts_version: v1                  # directory under prompts/
+
 handoff:
   whatsapp: "0309-4190245"
   whatsapp_link: "https://wa.me/923094190245"
   email: "info@genzskool.com"
   hours: "Mon-Sat, 10am-8pm"
-confirm_reminder: "Please confirm current batches and fees on WhatsApp 0309-4190245."
+
 # Prerequisite-style sequencing used by the deterministic recommender (earlier first).
 sequencing:
   - [digital-marketing, shopify]
   - [digital-marketing, tiktok-shop]
   - [graphic-design, video-editing]
   - [ai-automation, tiktok-automation]
+
+# What a learner's words say about which course interests them (lower-case words or phrases).
+interests:
+  shopify: [shopify, online store, own store, dropshipping store]
+  tiktok-shop: [tiktok shop, live selling, tiktok affiliate]
+  ebay: [ebay]
+  video-editing: [video editing, edit videos, editing videos, editing reels, reels, premiere, capcut, video editor, youtube videos, davinci]
+  digital-marketing: [digital marketing, seo, social media marketing, facebook ads, google ads, ads, marketing]
+  graphic-design: [graphic design, graphic designing, photoshop, illustrator, logo, logos, branding, designer, design]
+  ai-automation: [ai automation, chatgpt, make.com, automation workflows, automate, ai tools]
+  tiktok-automation: [tiktok automation, faceless, faceless videos]
+# A bare word that could mean several courses.
+ambiguous_interests:
+  tiktok: [tiktok-shop, tiktok-automation]
+  editing: [video-editing]
+
+goals:
+  earn_online: [earn online, online earning, earn money, make money, paise kamana, kamai, freelancing, freelance, fiverr, upwork, side income, earn from home]
+  business: [my business, own business, start a business, sell products, sell online, my brand]
+  job: [get a job, job, career]
+  learn: [learn something, learn a skill, new skill, something new, seekhna hai, sikhna hai, kuch seekhna]
+
+# Topics Genz Skool does not teach. Mentioning one (without any course keyword) is out of scope.
+out_of_scope_topics:
+  - data scientist
+  - data science
+  - machine learning
+  - python
+  - java
+  - javascript
+  - web development
+  - app development
+  - software engineering
+  - cyber security
+  - cybersecurity
+  - mbbs
+  - medicine
+  - accounting
+  - cooking
+  - recipe
+  - cricket
+  - football
+  - weather
+  - politics
+  - ielts
+  - english language course

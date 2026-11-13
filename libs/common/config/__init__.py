@@ -83,7 +83,8 @@ class LLMSettings(ServiceSettings):
     llm_api_key: SecretStr = SecretStr("")
     llm_model: str = ""
     llm_temperature: float = Field(default=0.2, ge=0.0, le=1.0)
-    llm_max_tokens: int = Field(default=800, ge=64, le=8192)
+    # Thinking tokens count toward this on current Claude models: a low cap truncates answers.
+    llm_max_tokens: int = Field(default=16000, ge=64, le=128000)
     llm_base_url: str | None = None
 
     def validate_runtime(self) -> None:

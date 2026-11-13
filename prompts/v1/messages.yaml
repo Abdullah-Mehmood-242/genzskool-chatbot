@@ -1,0 +1,117 @@
+# User-facing fixed wording (v1). {placeholders} are filled by the advisor.
+# Every key needs "en"; "roman_ur" is used for Roman Urdu and Urdu-script users.
+# Numbers must stay as digits (the grounding check verifies them) and nothing here may promise income.
+
+greeting:
+  en: "Hi! I'm the Genz Skool course advisor. Tell me what you'd like to do (for example sell online, edit videos, design, marketing or automation) and your budget, and I'll suggest the right course."
+  roman_ur: "Assalam o Alaikum! Main Genz Skool ka course advisor hoon. Mujhe batayein aap kya seekhna chahte hain (jaise online selling, video editing, design, marketing ya automation) aur aap ka budget kya hai, main sahi course suggest karunga."
+
+refusal_out_of_scope:
+  en: "Sorry, Genz Skool doesn't teach that, so I can't recommend a course for it. Genz Skool's courses are: Shopify, TikTok Shop, eBay, video editing, digital marketing, graphic design, AI automation and TikTok automation."
+  roman_ur: "Maazrat, Genz Skool yeh nahi parhata, is liye main iske liye course suggest nahi kar sakta. Genz Skool ke courses yeh hain: Shopify, TikTok Shop, eBay, video editing, digital marketing, graphic design, AI automation aur TikTok automation."
+
+refusal_advice:
+  en: "I can't give legal, medical or financial advice. I can only help with choosing a Genz Skool course."
+  roman_ur: "Main legal, medical ya financial mashwara nahi de sakta. Main sirf Genz Skool course chunne mein madad kar sakta hoon."
+
+refusal_unsafe:
+  en: "I can't help with that. I can help you choose a Genz Skool course, or answer questions about fees, batches, mentors and enrollment."
+  roman_ur: "Main is mein madad nahi kar sakta. Main Genz Skool course chunne, ya fees, batches, mentors aur enrollment ke sawalon mein madad kar sakta hoon."
+
+insufficient_evidence:
+  en: "I couldn't find that in Genz Skool's information, so I don't want to guess."
+  roman_ur: "Mujhe yeh Genz Skool ki maloomat mein nahi mila, is liye main andaza nahi lagana chahta."
+
+retrieval_down:
+  en: "I can't look up course details right now."
+  roman_ur: "Main abhi course ki tafseelat nahi dekh sakta."
+
+handoff:
+  en: "An advisor can help on WhatsApp {whatsapp} ({whatsapp_link}) or by email at {email} ({hours})."
+  roman_ur: "Advisor se WhatsApp {whatsapp} ({whatsapp_link}) ya email {email} par baat karein ({hours})."
+
+confirm_reminder:
+  en: "Please confirm current batches and fees on WhatsApp {whatsapp}."
+  roman_ur: "Barah-e-karam maujooda batches aur fees WhatsApp {whatsapp} par confirm kar lein."
+
+sources_label:
+  en: "Sources:"
+  roman_ur: "Sources:"
+
+clarify_interest:
+  en: "What would you like to do: sell online (Shopify, TikTok Shop, eBay), edit videos, graphic design, digital marketing, or AI automation?"
+  roman_ur: "Aap kya karna chahte hain: online selling (Shopify, TikTok Shop, eBay), video editing, graphic design, digital marketing ya AI automation?"
+
+clarify_budget:
+  en: "Roughly what budget do you have for a course (in rupees)?"
+  roman_ur: "Course ke liye aap ka andazan budget kitna hai (rupees mein)?"
+
+plan_intro:
+  en: "Here's what I'd suggest:"
+  roman_ur: "Meri suggestion yeh hai:"
+
+plan_intro_budget:
+  en: "Here's what I'd suggest for a budget of {budget}:"
+  roman_ur: "{budget} ke budget ke liye meri suggestion yeh hai:"
+
+plan_total_now:
+  en: "Total for the courses that fit your budget: {total}."
+  roman_ur: "Aap ke budget mein aane wale courses ka total: {total}."
+
+plan_total_all:
+  en: "Total for all of these: {total}."
+  roman_ur: "In sab ka total: {total}."
+
+plan_unknown_fee:
+  en: "The fee for {courses} is not published; ask on WhatsApp."
+  roman_ur: "{courses} ki fee published nahi hai; WhatsApp par poochein."
+
+plan_bundle:
+  en: "{mentor} teaches both {courses}."
+  roman_ur: "{mentor} {courses} dono parhate hain."
+
+plan_next_step:
+  en: "Possible next step later: {course}."
+  roman_ur: "Baad mein agla qadam: {course}."
+
+plan_none:
+  en: "I couldn't find a course that matches yet."
+  roman_ur: "Abhi koi matching course nahi mila."
+
+plan_over_budget:
+  en: "Above your budget: {courses}. Instalments are available on most courses; ask an advisor about {cheapest}."
+  roman_ur: "Aap ke budget se zyada: {courses}. Zyada tar courses par instalments hain; {cheapest} ke baare mein advisor se poochein."
+
+fee_unpublished:
+  en: "fee not published (ask on WhatsApp)"
+  roman_ur: "fee published nahi (WhatsApp par poochein)"
+
+mentor_label:
+  en: "mentor {mentor}"
+  roman_ur: "mentor {mentor}"
+
+fees_intro:
+  en: "Course fees:"
+  roman_ur: "Course fees:"
+
+reason_matches_interest:
+  en: "matches what you want"
+  roman_ur: "aap ki dilchaspi ke mutabiq"
+reason_beginner_friendly:
+  en: "beginner friendly"
+  roman_ur: "beginners ke liye"
+reason_fits_budget:
+  en: "fits your budget"
+  roman_ur: "budget mein"
+reason_fee_unpublished:
+  en: "fee not published"
+  roman_ur: "fee published nahi"
+reason_take_first:
+  en: "take this first"
+  roman_ur: "pehle yeh karein"
+reason_intermediate_level:
+  en: "intermediate level"
+  roman_ur: "intermediate level"
+reason_later_when_budget_allows:
+  en: "later, when budget allows"
+  roman_ur: "baad mein, jab budget ho"
