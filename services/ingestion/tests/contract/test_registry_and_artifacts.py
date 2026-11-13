@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import sys
 from collections.abc import Callable
 from datetime import UTC, datetime
 from pathlib import Path
@@ -230,3 +231,12 @@ def test_jsonl_delete_all_does_not_touch_other_docs(tmp_path: Path) -> None:
 def test_jsonl_rejects_unsafe_doc_ids(tmp_path: Path, doc_id: str) -> None:
     with pytest.raises(ValueError, match="unsafe"):
         JsonlChunkArtifactStore(tmp_path).write(doc_id, 1, [chunk(0)])
+
+
+@pytest.mark.skipif(sys.platform == "win32", reason="POSIX permission bits")
+def test_artifacts_are_world_readable(tmp_path: Path) -> None:
+    """Regression (Linux CI): mkstemp's 0600 made data/processed unreadable outside the container."""
+    JsonFileRegistry(tmp_path).put(record())
+    JsonlChunkArtifactStore(tmp_path).write("kb", 1, [chunk(0)])
+    for name in (REGISTRY_FILE, "kb.v1.chunks.jsonl"):
+        assert (tmp_path / name).stat().st_mode & 0o777 == 0o644, name

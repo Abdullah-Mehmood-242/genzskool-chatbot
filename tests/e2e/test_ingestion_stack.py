@@ -116,6 +116,15 @@ def test_chunks_are_inspectable_on_the_host() -> None:
     assert old == [f"{DOC}.v{version}.chunks.jsonl"], "only the active version's file may remain"
 
 
+def test_processed_files_are_world_readable_inside_container() -> None:
+    """Regression (Linux CI): artifacts were 0600, unreadable on the host. Checked in the container so
+    it also fails on Docker Desktop, where bind mounts do not enforce Linux permissions."""
+    listing = compose("exec", "-T", "ingestion", "sh", "-c", "stat -c '%a %n' /app/data/processed/*").stdout
+    modes = dict(line.split(" ", 1)[::-1] for line in listing.splitlines() if line.strip())
+    assert modes, "no artifacts found"
+    assert all(mode == "644" for mode in modes.values()), modes
+
+
 def test_qdrant_collection_shape_and_payload_indexes() -> None:
     info = httpx.get(f"{QDRANT}/collections/{COLLECTION}").json()["result"]
     assert info["config"]["params"]["vectors"] == {"size": 1024, "distance": "Cosine"} | {

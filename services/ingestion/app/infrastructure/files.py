@@ -27,6 +27,9 @@ REGISTRY_SCHEMA = 1
 _SAFE_ID = re.compile(r"^[a-z0-9_]{1,100}$")
 
 
+ARTIFACT_MODE = 0o644  # world-readable: retrieval and humans on the host must read these (no secrets in them)
+
+
 def atomic_write(path: Path, content: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     fd, tmp = tempfile.mkstemp(dir=path.parent, prefix=f".{path.name}.", suffix=".tmp")
@@ -35,6 +38,9 @@ def atomic_write(path: Path, content: str) -> None:
             fh.write(content)
             fh.flush()
             os.fsync(fh.fileno())
+        # mkstemp creates 0600 files. On Linux bind mounts that made data/processed unreadable to anyone
+        # but the container user (found by CI on Linux; Docker Desktop hides it).
+        os.chmod(tmp, ARTIFACT_MODE)
         os.replace(tmp, path)
     except BaseException:
         Path(tmp).unlink(missing_ok=True)
