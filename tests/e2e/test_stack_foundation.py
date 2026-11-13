@@ -45,11 +45,19 @@ def test_openapi_served(svc: str) -> None:
     assert spec["info"]["title"] == f"genz-{svc}"
 
 
-def test_all_containers_healthy(ps: dict[str, dict[str, object]]) -> None:
-    assert set(ps) == {*SERVICES, "qdrant"}
-    for name, row in ps.items():
-        assert row["State"] == "running", name
-        assert row["Health"] == "healthy", name
+def test_all_containers_healthy(docker_available: None) -> None:
+    """Polls: right after the Qdrant outage drill, Docker may not have re-run its 5 s health check yet."""
+    deadline = time.monotonic() + 60
+    rows: dict[str, dict[str, object]] = {}
+    while time.monotonic() < deadline:
+        out = compose("ps", "--format", "json").stdout
+        rows = {str(r["Service"]): r for r in (json.loads(ln) for ln in out.splitlines() if ln.strip())}
+        if set(rows) == {*SERVICES, "qdrant"} and all(
+            r["State"] == "running" and r["Health"] == "healthy" for r in rows.values()
+        ):
+            return
+        time.sleep(2)
+    pytest.fail(f"not all healthy after 60s: { {n: (r['State'], r['Health']) for n, r in rows.items()} }")
 
 
 @pytest.mark.parametrize("svc", SERVICES)

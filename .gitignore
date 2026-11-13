@@ -39,3 +39,6 @@ Thumbs.db
 
 # ---- Logs ----
 *.log
+
+# CI test reports
+*-junit.xml

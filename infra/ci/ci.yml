@@ -80,7 +80,13 @@ jobs:
       - run: chmod a+rwX data/processed
       - run: docker compose up -d --build --wait
       - run: sh scripts/ingest_all.sh
-      - run: python scripts/dev.py test e2e
+      - name: End-to-end tests
+        run: python scripts/dev.py test e2e
+        env:
+          PYTEST_ADDOPTS: --junitxml=e2e-junit.xml
+      - name: Annotate failed tests (readable on the run page without the full log)
+        if: failure()
+        run: python scripts/ci_annotate.py e2e-junit.xml
       - if: failure()
         run: docker compose logs --no-color
       - if: always()
